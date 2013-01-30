@@ -28,6 +28,16 @@ class Team < ActiveRecord::Base
     Team.select("teams.*, COUNT(teams.WSWin) AS winz")
       .where("WSWin IS NOT NULL")
       .group('teams.teamID')
+      .group('teams.yearID')
+      .order("winz DESC")
+  end
+
+  def self.lg_wins
+    Team.select("teams.*, COUNT(teams.LgWin) AS winz")
+      .where("LgWin != 'N'")
+      .where("WSWin IS NULL")
+      .group('teams.teamID')
+      .group('teams.yearID')
       .order("winz DESC")
   end
 end
