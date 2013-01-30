@@ -75,5 +75,20 @@ class Person < ActiveRecord::Base
 
     one_team
   end
+
+  def self.played_for_at_least_n_years(n)
+    Person.select("DISTINCT master.*")
+      .joins(:playerships)
+      .where('experience >= (?)', n)
+  end
+
+
+  def self.most_teams_in_career
+    Person.select('master.*, COUNT(DISTINCT teams.teamID) AS num_teams')
+      .joins(:teams)
+      .group('master.playerID')
+      .order('num_teams DESC')
+      .limit(5)
+  end
 end
 
